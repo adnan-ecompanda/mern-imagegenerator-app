@@ -5,7 +5,7 @@ import { AppContext } from '../context/AppContext';
 
 const Navbar = () => {
     const navigater = useNavigate();
-    const { user } = useContext(AppContext);
+    const { user, setShowLogin } = useContext(AppContext);
     return (
         <div className='flex justify-between items-center py-4'>
             <Link to="/">
@@ -33,7 +33,7 @@ const Navbar = () => {
                 ) : (
                     <div className='flex items-center gap-2 sm:gap-5'>
                         <p onClick={() => navigater('/buy-credit')} className='cursor-pointer'>Pricing</p>
-                        <button className='bg-zinc-800 text-white rounded-full py-2 px-7 sm:px-10 text-sm'>Login</button>
+                        <button onClick={() => setShowLogin(true)} className='bg-zinc-800 text-white rounded-full py-2 px-7 sm:px-10 text-sm cursor-pointer'>Login</button>
                     </div>
                 )}
             </div>
