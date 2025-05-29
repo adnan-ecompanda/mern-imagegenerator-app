@@ -91,9 +91,22 @@ const AppContextProvider = ({ children }) => {
             return { success: false, message };
         }
     };
+    const fetchUserImages = async () => {
+        try {
+            const res = await axios.get(`${backendUrl}/api/image/my-images`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return res.data.data;
+        } catch (err) {
+            toast.error("Failed to load your images");
+            return [];
+        }
+    };
 
     return (
-        <AppContext.Provider value={{ user, setUser, showLogin, setShowLogin, backendUrl, token, setToken, credits, setCredits, loadCredit, logout, generateImage }}>
+        <AppContext.Provider value={{ user, setUser, showLogin, setShowLogin, backendUrl, token, setToken, credits, setCredits, loadCredit, logout, generateImage, fetchUserImages }}>
             {children}
         </AppContext.Provider>
     );
