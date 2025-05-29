@@ -11,8 +11,8 @@ export const generateImage = async (req, res) => {
         if (!prompt) {
             return res.status(400).json({ success: false, message: "Prompt is required" });
         }
-        if (user.credit <= 0) {
-            return res.status(400).json({ success: false, message: "You have no credits" });
+        if (user.credit === 0 || userModel.credit < 0) {
+            return res.status(400).json({ success: false, message: "You have no credits", credit: user.credit });
         }
 
         const formData = new FormData();

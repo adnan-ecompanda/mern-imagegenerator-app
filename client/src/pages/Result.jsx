@@ -1,15 +1,53 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { assets } from '../assets/assets'
 import { motion } from 'framer-motion'
+import { AppContext } from '../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 const Result = () => {
     const [image, setImage] = useState(assets.sample_img_1);
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
     const [input, setInput] = useState('');
-    const onSubmitHandler = (e) => {
+    const { generateImage } = useContext(AppContext);
+    const navigate = useNavigate();
 
-    }
+    // const onSubmitHandler = async (e) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+
+    //     if (input) {
+    //         try {
+    //             const image = await generateImage(input);
+    //             console.log("Generated image:", image);
+    //             if (image) {
+    //                 setImage(image);
+    //                 setIsImageLoaded(true);
+    //             }
+    //         } catch (err) {
+    //             console.error("Image generation failed:", err);
+    //         }
+    //     }
+
+    //     setLoading(false);
+    // };
+    const onSubmitHandler = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        const result = await generateImage(input);
+        setLoading(false);
+
+        if (result.success) {
+            setImage(result.imageData);
+            setIsImageLoaded(true);
+        } else if (result.credit === 0) {
+            navigate('/buy-credit'); // ✅ This now works, because credit check is in the `catch` block
+        } else {
+            toast.error(result.message || "Something went wrong");
+        }
+    };
+
     return (
         <motion.form onSubmit={onSubmitHandler} className='flex flex-col items-center justify-center min-h-[90vh]' initial={{ opacity: 0.2, y: 100 }} transition={{ duration: 1 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div>
